@@ -15,11 +15,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Insert Default Roles
+        \Illuminate\Support\Facades\DB::table('roles')->insertOrIgnore([
+            ['id' => 1, 'name' => 'Admin'],
+            ['id' => 2, 'name' => 'PM'],
+            ['id' => 3, 'name' => 'Team Member'],
         ]);
     }
 }

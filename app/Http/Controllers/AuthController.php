@@ -6,27 +6,26 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
     /**
      * Redirect the user to the provider authentication page.
      */
-    public function redirect(string $provider): JsonResponse
+    public function redirect(string $provider)
     {
         if (!in_array($provider, ['google', 'microsoft'])) {
             return response()->json(['error' => 'Provider not supported.'], 400);
         }
 
-        return response()->json([
-            'url' => Socialite::driver($provider)->stateless()->redirect()->getTargetUrl(),
-        ]);
+        return Socialite::driver($provider)->stateless()->redirect();
     }
 
     /**
      * Obtain the user information from the provider.
      */
-    public function callback(string $provider): JsonResponse
+    public function callback(string $provider)
     {
         if (!in_array($provider, ['google', 'microsoft'])) {
             return response()->json(['error' => 'Provider not supported.'], 400);
@@ -71,20 +70,26 @@ class AuthController extends Controller
         // Issue a Sanctum token
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'user' => $user,
-        ]);
+        // Log the user into the web session so Blade @auth directives work
+        Auth::login($user);
+
+        // Redirect back to the SPA with the token
+        return redirect('/?token=' . $token);
     }
 
     /**
      * Log the user out (Invalidate the token).
      */
-    public function logout(Request $request): JsonResponse
+    public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        if ($request->user()) {
+            $request->user()->currentAccessToken()?->delete();
+        }
+        
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        return response()->json(['message' => 'Logged out successfully.']);
+        return redirect('/');
     }
 }

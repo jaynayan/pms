@@ -3,8 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
-Route::get('/auth/{provider}/redirect', [AuthController::class, 'redirect']);
-Route::get('/auth/{provider}/callback', [AuthController::class, 'callback']);
 
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
