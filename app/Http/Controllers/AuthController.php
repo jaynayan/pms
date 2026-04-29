@@ -34,7 +34,11 @@ class AuthController extends Controller
         try {
             $socialUser = Socialite::driver($provider)->stateless()->user();
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Authentication failed.'], 401);
+            return response()->json([
+                'error' => 'Authentication failed.',
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ], 401);
         }
 
         $user = User::where('provider_name', $provider)
