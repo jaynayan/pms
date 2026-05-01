@@ -28,11 +28,23 @@ class Project extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class)->withTimestamps();
+        return $this->belongsToMany(User::class)->withPivot('role')->withTimestamps();
     }
 
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);
+    }
+
+    public function scopeAccessibleBy($query, User $user)
+    {
+        if ($user->role_id === config('pms.roles.ADMIN')) {
+            return $query;
+        }
+
+        return $query->where('created_by', $user->id)
+            ->orWhereHas('users', function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            });
     }
 }

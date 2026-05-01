@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ asset('css/index.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body>
     <div class="app-container">
@@ -110,115 +110,38 @@
                 @endguest
 
                 @auth
-                <!-- Dashboard content for authenticated users -->
-                <div class="dashboard-stats">
-                    <div class="stat-card glass-panel">
-                        <div class="stat-icon purple"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div>
-                        <div class="stat-info">
-                            <h3>Active Projects</h3>
-                            <p class="stat-value">0</p>
-                        </div>
-                    </div>
-                    <div class="stat-card glass-panel">
-                        <div class="stat-icon blue"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></div>
-                        <div class="stat-info">
-                            <h3>Pending Tasks</h3>
-                            <p class="stat-value">0</p>
-                        </div>
-                    </div>
-                    <div class="stat-card glass-panel">
-                        <div class="stat-icon green"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
-                        <div class="stat-info">
-                            <h3>Completed</h3>
-                            <p class="stat-value">0</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="dashboard-grid">
-                    <div class="dashboard-column">
-                        <h3 class="section-title">Recent Projects</h3>
-                        <div class="project-list">
-                            <div class="project-card glass-panel">
-                                <div class="project-header">
-                                    <h4>Alpha Phase Redesign</h4>
-                                    <span class="status-pill green">In Progress</span>
-                                </div>
-                                <div class="progress-container">
-                                    <div class="progress-info">
-                                        <span>Completion</span>
-                                        <span>65%</span>
-                                    </div>
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" style="width: 65%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="project-card glass-panel">
-                                <div class="project-header">
-                                    <h4>Backend API Migration</h4>
-                                    <span class="status-pill blue">Planning</span>
-                                </div>
-                                <div class="progress-container">
-                                    <div class="progress-info">
-                                        <span>Completion</span>
-                                        <span>15%</span>
-                                    </div>
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" style="width: 15%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="project-card glass-panel">
-                                <div class="project-header">
-                                    <h4>Q3 Marketing Site</h4>
-                                    <span class="status-pill purple">Review</span>
-                                </div>
-                                <div class="progress-container">
-                                    <div class="progress-info">
-                                        <span>Completion</span>
-                                        <span>90%</span>
-                                    </div>
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" style="width: 90%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dashboard-column">
-                        <h3 class="section-title">My Tasks</h3>
-                        <div class="task-list">
-                            <label class="task-item">
-                                <input type="checkbox" class="custom-checkbox">
-                                <span class="task-title">Review final mockups</span>
-                                <span class="task-date">Today</span>
-                            </label>
-                            <label class="task-item">
-                                <input type="checkbox" class="custom-checkbox" checked>
-                                <span class="task-title">Draft API endpoints</span>
-                                <span class="task-date">Yesterday</span>
-                            </label>
-                            <label class="task-item">
-                                <input type="checkbox" class="custom-checkbox">
-                                <span class="task-title">Update dependencies</span>
-                                <span class="task-date">Tomorrow</span>
-                            </label>
-                            <label class="task-item">
-                                <input type="checkbox" class="custom-checkbox">
-                                <span class="task-title">Schedule sprint planning</span>
-                                <span class="task-date">Apr 30</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
+                @include('partials.dashboard')
+                @include('partials.projects')
+                @include('partials.backlog')
+                @include('partials.board')
+                @include('partials.project-modal')
+                @include('partials.task-modal')
+                @include('partials.task-details-modal')
+                @include('partials.invite-modal')
                 @endauth
             </div>
         </main>
     </div>
 
+    <!-- SortableJS for Drag and Drop -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
+    <!-- Modules -->
+    <script src="{{ asset('js/modules/projects.js') }}"></script>
+    <script src="{{ asset('js/modules/tasks.js') }}"></script>
+    
+    @auth
+    <script>
+        window.currentUser = @json(auth()->user());
+    </script>
+    @endauth
+    
+    <!-- Toast Container -->
+    <div id="toast-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none;"></div>
+
     <!-- App Logic -->
     <script src="{{ asset('js/app.js') }}"></script>
 </body>

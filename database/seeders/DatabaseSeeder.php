@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             ['id' => 1, 'name' => 'Admin'],
             ['id' => 2, 'name' => 'PM'],
             ['id' => 3, 'name' => 'Team Member'],
+            ['id' => 4, 'name' => 'Viewer'],
         ]);
     }
 }

@@ -58,6 +58,26 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    public function isAdmin(): bool
+    {
+        return $this->role_id === config('pms.roles.ADMIN');
+    }
+
+    public function isPM(): bool
+    {
+        return $this->role_id === config('pms.roles.PROJECT_MANAGER');
+    }
+
+    public function isTeamMember(): bool
+    {
+        return $this->role_id === config('pms.roles.TEAM_MEMBER');
+    }
+
+    public function isViewer(): bool
+    {
+        return $this->role_id === config('pms.roles.VIEWER');
+    }
+
     public function createdProjects(): HasMany
     {
         return $this->hasMany(Project::class, 'created_by');
@@ -65,7 +85,7 @@ class User extends Authenticatable
 
     public function projects(): BelongsToMany
     {
-        return $this->belongsToMany(Project::class)->withTimestamps();
+        return $this->belongsToMany(Project::class)->withPivot('role')->withTimestamps();
     }
 
     public function createdTasks(): HasMany

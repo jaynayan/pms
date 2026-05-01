@@ -5,7 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use App\Observers\TaskObserver;
 
+#[ObservedBy(TaskObserver::class)]
 class Task extends Model
 {
     use SoftDeletes;
@@ -23,6 +26,10 @@ class Task extends Model
         'position',
         'original_estimate',
         'total_spent',
+    ];
+
+    protected $casts = [
+        'is_backlog' => 'boolean',
     ];
 
     public function project(): BelongsTo

@@ -65,8 +65,9 @@ class AuthController extends Controller
                     'provider_name' => $provider,
                     'provider_id' => $socialUser->getId(),
                     'avatar_url' => $socialUser->getAvatar(),
-                    // Default role is "Team Member" (assuming ID 3 based on migrations)
-                    'role_id' => 3, 
+                    // Users are created with the lowest global role (VIEWER).
+                    // They get no project access until explicitly invited to the project_user table.
+                    'role_id' => config('pms.roles.VIEWER', 4), 
                 ]);
             }
         }

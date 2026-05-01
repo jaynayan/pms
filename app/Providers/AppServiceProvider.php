@@ -23,5 +23,9 @@ class AppServiceProvider extends ServiceProvider
             \SocialiteProviders\Manager\SocialiteWasCalled::class,
             [\SocialiteProviders\Microsoft\MicrosoftExtendSocialite::class, 'handle']
         );
+        
+        \Illuminate\Support\Facades\Event::subscribe(
+            \App\Listeners\SendTaskUpdateNotification::class
+        );
     }
 }
